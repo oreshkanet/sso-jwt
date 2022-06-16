@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/oreshkanet/sso-jwt/internal/repository"
 )
 
 type SoftwareAuthService interface {
@@ -14,4 +15,14 @@ type ExternalClientAuthService interface {
 
 type UserAuthService interface {
 	Auth(ctx context.Context, id string, pwd string, scope string) (string, error)
+}
+
+type Service struct {
+	Software       SoftwareAuthService
+	ExternalClient ExternalClientAuthService
+	User           UserAuthService
+}
+
+func NewService(repos *repository.Repository) *Service {
+	return &Service{}
 }
