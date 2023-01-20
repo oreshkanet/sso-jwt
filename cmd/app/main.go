@@ -2,8 +2,12 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/oreshkanet/sso-jwt/internal/app"
+	"github.com/oreshkanet/sso-jwt/internal/config"
+	"github.com/oreshkanet/sso-jwt/pkg/database"
 	"golang.org/x/sync/errgroup"
+	"log"
 	"os/signal"
 	"syscall"
 	"time"
@@ -13,6 +17,20 @@ func main() {
 	ctx := context.Background()
 
 	// FIXME: db, http, tokenizer
+	conf := config.NewConfig()
+
+	// Создаём подключение к БД
+	dbURL := fmt.Sprintf(
+		"sqlserver://%s:%s@%s?database=%s",
+		conf.MsSqlUser, conf.MsSqlPwd,
+		conf.MsSqlServer, conf.MsSqlDb,
+	)
+	db, err := database.NewDBMsSQL(ctx, dbURL)
+	if err != nil {
+		log.Fatalf("%s", err.Error())
+		return
+	}
+	defer db.Close()
 
 	// FIXME NewApp
 	a := app.NewApp()

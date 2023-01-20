@@ -1,0 +1,11 @@
+version: "3"
+services:
+  # sso
+  auth:
+    build: sso/
+    ports:
+      - 8082:8082
+    environment:
+      - PORT=8082
+      - SIGNING_KEY=a001c3a244ac1f9d1cc9a197cc12f9fa
+      - HASH_SALT=affd7407a2ebab039d8fef8c6c5bbde6
